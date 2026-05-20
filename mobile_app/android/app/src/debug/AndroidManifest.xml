@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Flutter debug tools uchun kerak (hot reload, breakpoints) -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Development da HTTP (localhost, lokal IP) ga ulanish uchun -->
+    <application android:usesCleartextTraffic="true"/>
+</manifest>
