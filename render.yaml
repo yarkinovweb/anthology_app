@@ -1,0 +1,49 @@
+services:
+  - type: web
+    name: anthology-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm run migrate && npm start
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_HOST
+        fromDatabase:
+          name: anthology-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: anthology-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: anthology-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: anthology-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: anthology-db
+          property: password
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_REGION
+        sync: false
+      - key: AWS_S3_BUCKET_NAME
+        sync: false
+
+databases:
+  - name: anthology-db
+    databaseName: anthology_db
+    user: anthology_user
+    plan: free
