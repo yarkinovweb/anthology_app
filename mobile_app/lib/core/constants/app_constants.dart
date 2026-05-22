@@ -5,7 +5,7 @@ class AppConstants {
   // Agar berilmasa, lokal development IP ishlatiladi.
   static const String baseUrl = String.fromEnvironment(
     'API_URL',
-    defaultValue: 'http://10.0.2.2:3000/api', // Android emulator default
+    defaultValue: 'https://anthology-backend.onrender.com/api',
   );
 
   // Hive
