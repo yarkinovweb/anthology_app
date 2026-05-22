@@ -69,6 +69,10 @@ class AppRouter {
     final authState = authBloc.state;
 
     if (authState is AuthInitial || authState is AuthLoading) {
+      // Login/register sahifasida loading vaqtida redirect qilmaymiz —
+      // button ichidagi spinner yetarli. Aks holda BlocListener unmount
+      // bo'lib, xato SnackBar ko'rinmay qoladi.
+      if (loc == '/login' || loc == '/register') return null;
       return loc == '/splash' ? null : '/splash';
     }
 
