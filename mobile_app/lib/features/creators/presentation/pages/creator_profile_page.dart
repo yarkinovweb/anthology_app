@@ -97,11 +97,19 @@ class _CreatorProfileView extends StatelessWidget {
               foregroundColor: Colors.white,
               icon: const Icon(Icons.upload_file),
               label: Text('works_upload'.tr()),
-              onPressed: () => context.pushNamed(
-                AppRoutes.upload,
-                pathParameters: {'creatorId': creator.id},
-                queryParameters: {'name': creator.name},
-              ),
+              onPressed: () => context
+                  .pushNamed(
+                    AppRoutes.upload,
+                    pathParameters: {'creatorId': creator.id},
+                    queryParameters: {'name': creator.name},
+                  )
+                  .then((_) {
+                if (context.mounted) {
+                  context
+                      .read<CreatorDetailBloc>()
+                      .add(LoadCreatorDetailEvent(creatorId));
+                }
+              }),
             )
           : null,
       body: RefreshIndicator(
@@ -368,67 +376,76 @@ class _WorkTile extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
-          color: AppTheme.surface,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          border: Border(
-            left:   BorderSide(color: color, width: 3),
-            top:    const BorderSide(color: AppTheme.cardBorder),
-            right:  const BorderSide(color: AppTheme.cardBorder),
-            bottom: const BorderSide(color: AppTheme.cardBorder),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-          child: Row(
-            children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color:        color.withAlpha(20),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(icon, color: color, size: 20),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      work.title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize:   14,
-                        color:      AppTheme.textDark,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (work.description != null &&
-                        work.description!.isNotEmpty) ...[
-                      const SizedBox(height: 3),
-                      Text(
-                        work.description!,
-                        style: const TextStyle(
-                          fontSize:  12,
-                          color:     AppTheme.textMuted,
-                          fontStyle: FontStyle.italic,
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppTheme.surface,
+              border: Border.all(color: AppTheme.cardBorder),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(width: 4, color: color),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 11),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 38,
+                          height: 38,
+                          decoration: BoxDecoration(
+                            color:        color.withAlpha(20),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(icon, color: color, size: 20),
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ],
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                work.title,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize:   14,
+                                  color:      AppTheme.textDark,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              if (work.description != null &&
+                                  work.description!.isNotEmpty) ...[
+                                const SizedBox(height: 3),
+                                Text(
+                                  work.description!,
+                                  style: const TextStyle(
+                                    fontSize:  12,
+                                    color:     AppTheme.textMuted,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        const Icon(Icons.chevron_right,
+                            color: AppTheme.textMuted, size: 18),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              const Icon(Icons.chevron_right,
-                  color: AppTheme.textMuted, size: 18),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -10,21 +10,23 @@ const VALID_MEDIA_TYPES = ['image', 'audio', 'video', 'pdf', 'text'];
 const uploadWork = async (req, res) => {
   try {
     const file = req.file;
-    if (!file) {
-      return res.status(400).json({ message: 'Fayl yuklanmadi' });
-    }
-
     const { creator_id, title, description, content_text } = req.body;
 
+    // Fayl yoki matn bo'lishi shart
+    const hasText = content_text && content_text.trim().length > 0;
+    if (!file && !hasText) {
+      return res.status(400).json({ message: 'Fayl yoki matn kiritish majburiy' });
+    }
+
     if (!creator_id || !title) {
-      await deleteFromS3(file.key).catch((e) =>
+      if (file) await deleteFromS3(file.key).catch((e) =>
         console.error('S3 rollback xatosi:', e.message),
       );
       return res.status(400).json({ message: 'creator_id va title majburiy' });
     }
 
     if (!isUUID(creator_id)) {
-      await deleteFromS3(file.key).catch((e) =>
+      if (file) await deleteFromS3(file.key).catch((e) =>
         console.error('S3 rollback xatosi:', e.message),
       );
       return res.status(400).json({ message: 'creator_id UUID formatida bo\'lishi kerak' });
@@ -32,7 +34,7 @@ const uploadWork = async (req, res) => {
 
     const creator = await pool.query('SELECT id FROM creators WHERE id = $1', [creator_id]);
     if (!creator.rows[0]) {
-      await deleteFromS3(file.key).catch((e) =>
+      if (file) await deleteFromS3(file.key).catch((e) =>
         console.error('S3 rollback xatosi:', e.message),
       );
       return res.status(404).json({ message: 'Ijodkor topilmadi' });
@@ -54,12 +56,12 @@ const uploadWork = async (req, res) => {
       [
         creator_id,
         title.trim(),
-        description   || null,
-        file.location,
-        file.key,
-        file.mediaType,
-        file.size,
-        content_text  || null,
+        description        || null,
+        file ? file.location : '',
+        file ? file.key    : '',
+        file ? file.mediaType : 'text',
+        file ? file.size   : 0,
+        content_text       || null,
         initialStatus,
         uploadedBy,
       ],
