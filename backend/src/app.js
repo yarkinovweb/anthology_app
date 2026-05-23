@@ -19,20 +19,20 @@ app.use(express.json());
 
 const isDev = config.nodeEnv === 'development';
 
-// Umumiy rate limit: 15 daqiqada 100 so'rov (dev muhitida o'chirilgan)
+// Umumiy rate limit: 15 daqiqada 500 so'rov (dev muhitida o'chirilgan)
 app.use('/api/', rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 500,
   skip: () => isDev,
   standardHeaders: true,
   legacyHeaders: false,
   message: { message: 'Juda ko\'p so\'rovlar, keyinroq urinib ko\'ring' },
 }));
 
-// Auth endpointlari uchun limit: 15 daqiqada 10 urinish (dev muhitida o'chirilgan)
+// Auth endpointlari uchun limit: 15 daqiqada 50 urinish (dev muhitida o'chirilgan)
 app.use('/api/auth', rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: 50,
   skip: () => isDev,
   standardHeaders: true,
   legacyHeaders: false,

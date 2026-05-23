@@ -15,6 +15,8 @@
   "auth_password_hint": "Минимум 8 символов",
   "auth_no_account": "Нет аккаунта?",
   "auth_have_account": "Уже есть аккаунт?",
+  "auth_email_invalid": "Неверный формат email",
+  "auth_name_min_length": "Имя должно содержать не менее 2 символов",
 
   "creators_title": "Творцы",
   "creators_all": "Все творцы",

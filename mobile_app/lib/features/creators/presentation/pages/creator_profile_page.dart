@@ -20,13 +20,14 @@ class CreatorProfilePage extends StatelessWidget {
     return BlocProvider(
       create: (_) =>
           sl<CreatorDetailBloc>()..add(LoadCreatorDetailEvent(creatorId)),
-      child: const _CreatorProfileView(),
+      child: _CreatorProfileView(creatorId: creatorId),
     );
   }
 }
 
 class _CreatorProfileView extends StatelessWidget {
-  const _CreatorProfileView();
+  final String creatorId;
+  const _CreatorProfileView({required this.creatorId});
 
   static const List<Color> _avatarColors = [
     Color(0xFF4A1525), Color(0xFF6B2737), Color(0xFF7D3945),
@@ -103,10 +104,16 @@ class _CreatorProfileView extends StatelessWidget {
               ),
             )
           : null,
-      body: CustomScrollView(
-        slivers: [
-          _buildSliverAppBar(context, creator, color, canManage: canManage),
-          SliverToBoxAdapter(
+      body: RefreshIndicator(
+        color: AppTheme.primary,
+        onRefresh: () async {
+          context.read<CreatorDetailBloc>().add(LoadCreatorDetailEvent(creatorId));
+        },
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            _buildSliverAppBar(context, creator, color, canManage: canManage),
+            SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -124,6 +131,7 @@ class _CreatorProfileView extends StatelessWidget {
             ),
           ),
         ],
+        ),
       ),
     );
   }

@@ -15,6 +15,8 @@
   "auth_password_hint": "Кеминде 8 символ",
   "auth_no_account": "Аккаунтуңуз жокпу?",
   "auth_have_account": "Аккаунтуңуз барбы?",
+  "auth_email_invalid": "Email форматы туура эмес",
+  "auth_name_min_length": "Аты-жөн кеминде 2 белгиден турушу керек",
 
   "creators_title": "Чыгармачылар",
   "creators_all": "Бардык чыгармачылар",

@@ -112,7 +112,7 @@ class _ProfileViewState extends State<_ProfileView> {
                   const Icon(Icons.error_outline, color: Colors.white, size: 20),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Text(state.message,
+                    child: Text(state.message.tr(),
                         style: const TextStyle(color: Colors.white)),
                   ),
                 ],
@@ -172,7 +172,7 @@ class _ProfileViewState extends State<_ProfileView> {
                     const Icon(Icons.error_outline,
                         size: 48, color: AppTheme.textMuted),
                     const SizedBox(height: 12),
-                    Text(state.message,
+                    Text(state.message.tr(),
                         style:
                             const TextStyle(color: AppTheme.textMuted)),
                     const SizedBox(height: 16),

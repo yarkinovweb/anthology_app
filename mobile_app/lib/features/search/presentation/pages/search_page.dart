@@ -71,6 +71,8 @@ class _SearchPageState extends State<SearchPage>
           decoration: InputDecoration(
             hintText:  'search_hint'.tr(),
             hintStyle: const TextStyle(color: Colors.white54, fontSize: 15),
+            filled:    true,
+            fillColor: Colors.transparent,
             border:    InputBorder.none,
             enabledBorder: InputBorder.none,
             focusedBorder: InputBorder.none,

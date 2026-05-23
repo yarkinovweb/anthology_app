@@ -22,7 +22,7 @@ class AuthRepositoryImpl implements AuthRepository {
     } on AuthException catch (e) {
       return Left(AuthFailure(e.message));
     } on NetworkException {
-      return const Left(NetworkFailure('Internet aloqasi yo\'q yoki server javob bermayapti'));
+      return const Left(NetworkFailure('error_network'));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e) {
@@ -41,7 +41,7 @@ class AuthRepositoryImpl implements AuthRepository {
     } on AuthException catch (e) {
       return Left(AuthFailure(e.message));
     } on NetworkException {
-      return const Left(NetworkFailure('Internet aloqasi yo\'q yoki server javob bermayapti'));
+      return const Left(NetworkFailure('error_network'));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e) {

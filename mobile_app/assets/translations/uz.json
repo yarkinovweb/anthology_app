@@ -15,6 +15,8 @@
   "auth_password_hint": "Kamida 8 ta belgi",
   "auth_no_account": "Akkauntingiz yo'qmi?",
   "auth_have_account": "Akkauntingiz bormi?",
+  "auth_email_invalid": "Email formati noto'g'ri",
+  "auth_name_min_length": "Ism kamida 2 ta belgi bo'lishi kerak",
 
   "creators_title": "Ijodkorlar",
   "creators_all": "Barcha ijodkorlar",

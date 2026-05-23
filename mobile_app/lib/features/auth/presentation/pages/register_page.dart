@@ -57,7 +57,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          state.message,
+                          state.message.tr(),
                           style: const TextStyle(color: Colors.white),
                         ),
                       ),
@@ -153,7 +153,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 validator: (v) {
                   if (v == null || v.trim().isEmpty) return 'auth_name'.tr();
-                  if (v.trim().length < 2) return 'Ism kamida 2 ta belgi';
+                  if (v.trim().length < 2) return 'auth_name_min_length'.tr();
                   return null;
                 },
               ),
@@ -170,7 +170,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 validator: (v) {
                   if (v == null || v.trim().isEmpty) return 'auth_email'.tr();
                   if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(v.trim())) {
-                    return 'Email formati noto\'g\'ri';
+                    return 'auth_email_invalid'.tr();
                   }
                   return null;
                 },

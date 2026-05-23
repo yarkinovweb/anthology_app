@@ -44,6 +44,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> _refresh() async {
+    context.read<CreatorsBloc>().add(const FetchCreatorsEvent());
+  }
+
   void _applyFilters({String? categoryId, bool clear = false}) {
     if (clear) {
       setState(() {
@@ -233,34 +237,51 @@ class _HomePageState extends State<HomePage> {
         }
         if (state is CreatorsLoaded) {
           if (state.creators.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.search_off, size: 56, color: AppTheme.textMuted.withAlpha(100)),
-                  const SizedBox(height: 12),
-                  Text(
-                    'search_no_results'.tr(),
-                    style: const TextStyle(color: AppTheme.textMuted, fontSize: 15),
+            return LayoutBuilder(
+              builder: (_, constraints) => RefreshIndicator(
+                color: AppTheme.primary,
+                onRefresh: _refresh,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: SizedBox(
+                    height: constraints.maxHeight,
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.search_off, size: 56, color: AppTheme.textMuted.withAlpha(100)),
+                          const SizedBox(height: 12),
+                          Text(
+                            'search_no_results'.tr(),
+                            style: const TextStyle(color: AppTheme.textMuted, fontSize: 15),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ],
+                ),
               ),
             );
           }
-          return GridView.builder(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount:   2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing:  12,
-              childAspectRatio: 0.62,
-            ),
-            itemCount: state.creators.length,
-            itemBuilder: (_, i) => _CreatorCard(
-              creator: state.creators[i],
-              onTap:   () => context.pushNamed(
-                AppRoutes.creator,
-                pathParameters: {'id': state.creators[i].id},
+          return RefreshIndicator(
+            color: AppTheme.primary,
+            onRefresh: _refresh,
+            child: GridView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount:   2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing:  12,
+                childAspectRatio: 0.62,
+              ),
+              itemCount: state.creators.length,
+              itemBuilder: (_, i) => _CreatorCard(
+                creator: state.creators[i],
+                onTap:   () => context.pushNamed(
+                  AppRoutes.creator,
+                  pathParameters: {'id': state.creators[i].id},
+                ),
               ),
             ),
           );

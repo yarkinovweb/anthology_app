@@ -107,7 +107,7 @@ class _UploadViewState extends State<_UploadView> {
         if (state is UploadErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.message),
+              content: Text(state.message.tr()),
               backgroundColor: Colors.red,
             ),
           );

@@ -15,6 +15,8 @@
   "auth_password_hint": "At least 8 characters",
   "auth_no_account": "Don't have an account?",
   "auth_have_account": "Already have an account?",
+  "auth_email_invalid": "Invalid email format",
+  "auth_name_min_length": "Name must be at least 2 characters",
 
   "creators_title": "Creators",
   "creators_all": "All Creators",

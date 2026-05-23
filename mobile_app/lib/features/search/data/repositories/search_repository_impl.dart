@@ -40,12 +40,12 @@ class SearchRepositoryImpl implements SearchRepository {
   Failure _mapError(DioException e) {
     if (e.type == DioExceptionType.connectionTimeout ||
         e.type == DioExceptionType.connectionError) {
-      return const NetworkFailure('Internet aloqasi yo\'q');
+      return const NetworkFailure('error_network');
     }
     final message =
         (e.response?.data as Map<String, dynamic>?)?['message'] as String? ??
             e.message ??
-            'Xato yuz berdi';
+            'error_unknown';
     return ServerFailure(message);
   }
 }

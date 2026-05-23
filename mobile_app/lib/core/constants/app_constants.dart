@@ -18,7 +18,7 @@ class AppConstants {
   static const String userKey         = 'user_data';
   static const String langKey         = 'selected_lang';
 
-  // Network
-  static const Duration connectTimeout = Duration(seconds: 15);
-  static const Duration receiveTimeout = Duration(seconds: 15);
+  // Network — Render free tier cold start uchun 30 soniya
+  static const Duration connectTimeout = Duration(seconds: 30);
+  static const Duration receiveTimeout = Duration(seconds: 30);
 }

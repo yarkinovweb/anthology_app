@@ -96,11 +96,17 @@ class _WorkDetailView extends StatelessWidget {
   Widget _buildLoaded(BuildContext context, WorkDetailEntity work) {
     return Scaffold(
       backgroundColor: AppTheme.background,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true,
-            backgroundColor: AppTheme.primary,
+      body: RefreshIndicator(
+        color: AppTheme.primary,
+        onRefresh: () async {
+          context.read<WorkDetailBloc>().add(LoadWorkDetailEvent(workId));
+        },
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              backgroundColor: AppTheme.primary,
             foregroundColor: Colors.white,
             title: Text(
               work.title,
@@ -208,6 +214,7 @@ class _WorkDetailView extends StatelessWidget {
             ),
           ),
         ],
+        ),
       ),
     );
   }

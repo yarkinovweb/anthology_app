@@ -15,6 +15,8 @@
   "auth_password_hint": "En az 8 karakter",
   "auth_no_account": "Hesabınız yok mu?",
   "auth_have_account": "Hesabınız var mı?",
+  "auth_email_invalid": "Geçersiz e-posta formatı",
+  "auth_name_min_length": "Ad en az 2 karakter olmalıdır",
 
   "creators_title": "Yaratıcılar",
   "creators_all": "Tüm Yaratıcılar",

@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          state.message,
+                          state.message.tr(),
                           style: const TextStyle(color: Colors.white),
                         ),
                       ),
@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                 validator: (v) {
                   if (v == null || v.trim().isEmpty) return 'auth_email'.tr();
                   if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(v.trim())) {
-                    return 'Email formati noto\'g\'ri';
+                    return 'auth_email_invalid'.tr();
                   }
                   return null;
                 },

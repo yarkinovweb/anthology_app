@@ -489,7 +489,7 @@ class _StatsSection extends StatelessWidget {
                     color: AppTheme.textMuted, size: 18),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(state.message,
+                  child: Text(state.message.tr(),
                       style: const TextStyle(
                           color: AppTheme.textMuted, fontSize: 13)),
                 ),
@@ -961,7 +961,7 @@ class _ErrorView extends StatelessWidget {
         children: [
           const Icon(Icons.error_outline, size: 48, color: AppTheme.textMuted),
           const SizedBox(height: 12),
-          Text(message,
+          Text(message.tr(),
               style: const TextStyle(color: AppTheme.textMuted),
               textAlign: TextAlign.center),
           const SizedBox(height: 16),

@@ -67,10 +67,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final data = e.response?.data;
       if (data is Map<String, dynamic>) {
-        return data['message'] as String? ?? 'Xato yuz berdi';
+        return data['message'] as String? ?? 'error_unknown';
       }
       if (data is String && data.isNotEmpty) return data;
     } catch (_) {}
-    return e.message ?? 'Xato yuz berdi';
+    return e.message ?? 'error_unknown';
   }
 }

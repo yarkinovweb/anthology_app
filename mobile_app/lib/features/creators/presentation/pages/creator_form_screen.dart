@@ -120,7 +120,7 @@ class _CreatorFormViewState extends State<_CreatorFormView> {
         if (state is CreatorManageError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.message),
+              content: Text(state.message.tr()),
               backgroundColor: Colors.red,
             ),
           );

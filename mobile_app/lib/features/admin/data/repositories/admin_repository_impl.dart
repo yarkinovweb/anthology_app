@@ -105,13 +105,13 @@ class AdminRepositoryImpl implements AdminRepository {
   Failure _mapError(DioException e) {
     if (e.type == DioExceptionType.connectionTimeout ||
         e.type == DioExceptionType.receiveTimeout) {
-      return const NetworkFailure('Connection timeout');
+      return const NetworkFailure('error_network');
     }
     final code = e.response?.statusCode;
-    if (code == 401) return const AuthFailure('Unauthorized');
-    if (code == 403) return const AuthFailure('Access denied');
-    if (code == 404) return const ServerFailure('Not found');
+    if (code == 401) return const AuthFailure('error_auth');
+    if (code == 403) return const AuthFailure('error_auth');
+    if (code == 404) return const ServerFailure('error_not_found');
     return ServerFailure(
-        e.response?.data?['message'] as String? ?? 'Server error');
+        e.response?.data?['message'] as String? ?? 'error_server');
   }
 }
