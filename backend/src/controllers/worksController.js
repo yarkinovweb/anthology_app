@@ -4,7 +4,7 @@ const { isUUID } = require('../middleware/validate');
 const { translateFields, parseLang } = require('../services/translationService');
 
 const VALID_STATUSES    = ['pending', 'approved', 'rejected'];
-const VALID_MEDIA_TYPES = ['image', 'audio', 'video', 'pdf'];
+const VALID_MEDIA_TYPES = ['image', 'audio', 'video', 'pdf', 'text'];
 
 // POST /api/works/upload
 const uploadWork = async (req, res) => {
