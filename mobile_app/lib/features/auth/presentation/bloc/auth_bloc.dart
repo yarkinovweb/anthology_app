@@ -36,7 +36,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(const AuthLoading());
-    final result = await _checkAuth();
+    // Splash animatsiyasi ko'rinishi uchun minimal kutish vaqti
+    final authFuture = _checkAuth();
+    await Future.wait([authFuture, Future.delayed(const Duration(milliseconds: 2000))]);
+    final result = await authFuture;
     result.fold(
       (_) => emit(const Unauthenticated()),
       (user) =>

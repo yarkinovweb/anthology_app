@@ -8,6 +8,7 @@ import '../../features/admin/presentation/pages/admin_dashboard.dart';
 import '../../features/admin/presentation/pages/upload_screen.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
+import '../../features/splash/presentation/pages/splash_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/creators/domain/entities/creator_entity.dart';
 import '../../features/creators/presentation/bloc/creators_bloc.dart';
@@ -91,9 +92,7 @@ class AppRouter {
         GoRoute(
           path:    '/splash',
           name:    AppRoutes.splash,
-          builder: (_, __) => const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          ),
+          builder: (_, __) => const SplashPage(),
         ),
         GoRoute(
           path:    '/login',
