@@ -8,8 +8,9 @@ const worksRoutes      = require('./routes/worksRoutes');
 const creatorsRoutes   = require('./routes/creatorsRoutes');
 const countriesRoutes  = require('./routes/countriesRoutes');
 const categoriesRoutes = require('./routes/categoriesRoutes');
-const adminRoutes      = require('./routes/adminRoutes');
-const userRoutes       = require('./routes/userRoutes');
+const adminRoutes            = require('./routes/adminRoutes');
+const userRoutes             = require('./routes/userRoutes');
+const deleteAccountRoutes    = require('./routes/deleteAccountRoutes');
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use('/api/countries',  countriesRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/admin',      adminRoutes);
 app.use('/api/users',      userRoutes);
+app.use('/delete-account', deleteAccountRoutes);
 
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
