@@ -60,6 +60,8 @@ class _CreatorProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CreatorDetailBloc, CreatorDetailState>(
       builder: (context, state) {
+        debugPrint('[CreatorProfileView] state=${state.runtimeType}');
+
         if (state is CreatorDetailLoading || state is CreatorDetailInitial) {
           return const Scaffold(
             body: Center(child: CircularProgressIndicator()),
@@ -90,6 +92,7 @@ class _CreatorProfileView extends StatelessWidget {
         }
 
         if (state is CreatorDetailLoaded) {
+          debugPrint('[CreatorProfileView] building loaded UI for ${state.creator.name}');
           return _buildLoaded(context, state.creator);
         }
 
