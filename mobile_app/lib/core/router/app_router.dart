@@ -57,7 +57,10 @@ class AppRouter {
 
   AppRouter(this.authBloc);
 
+  final _rootNavigatorKey = GlobalKey<NavigatorState>();
+
   late final GoRouter router = GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: '/splash',
     debugLogDiagnostics: false,
     refreshListenable: _AuthRefreshNotifier(authBloc.stream),
@@ -105,8 +108,10 @@ class AppRouter {
           builder: (_, __) => const RegisterPage(),
         ),
 
-        // Full-screen routes (no BottomNav)
+        // Full-screen routes (no BottomNav) — parentNavigatorKey ensures
+        // these are pushed on the root navigator, not the shell navigator.
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/creator/:id',
           name: AppRoutes.creator,
           builder: (_, state) => CreatorProfilePage(
@@ -114,6 +119,7 @@ class AppRouter {
           ),
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/work/:id',
           name: AppRoutes.work,
           builder: (_, state) => WorkDetailPage(
@@ -122,6 +128,7 @@ class AppRouter {
           ),
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path: '/upload/:creatorId',
           name: AppRoutes.upload,
           builder: (_, state) => UploadScreen(
@@ -130,11 +137,13 @@ class AppRouter {
           ),
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path:    '/admin',
           name:    AppRoutes.admin,
           builder: (_, __) => const AdminDashboard(),
         ),
         GoRoute(
+          parentNavigatorKey: _rootNavigatorKey,
           path:    '/creator-form',
           name:    AppRoutes.creatorForm,
           builder: (_, state) => CreatorFormScreen(

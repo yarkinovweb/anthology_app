@@ -276,9 +276,9 @@ class _HomePageState extends State<HomePage> {
                 childAspectRatio: 0.62,
               ),
               itemCount: state.creators.length,
-              itemBuilder: (_, i) => _CreatorCard(
+              itemBuilder: (ctx, i) => _CreatorCard(
                 creator: state.creators[i],
-                onTap:   () => context.pushNamed(
+                onTap:   () => ctx.pushNamed(
                   AppRoutes.creator,
                   pathParameters: {'id': state.creators[i].id},
                 ),

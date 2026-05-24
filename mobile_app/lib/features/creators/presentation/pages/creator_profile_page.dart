@@ -10,17 +10,36 @@ import '../../domain/entities/creator_entity.dart';
 import '../../domain/entities/work_preview_entity.dart';
 import '../bloc/creator_detail_bloc.dart';
 
-class CreatorProfilePage extends StatelessWidget {
+class CreatorProfilePage extends StatefulWidget {
   final String creatorId;
 
   const CreatorProfilePage({super.key, required this.creatorId});
 
   @override
+  State<CreatorProfilePage> createState() => _CreatorProfilePageState();
+}
+
+class _CreatorProfilePageState extends State<CreatorProfilePage> {
+  late final CreatorDetailBloc _bloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = sl<CreatorDetailBloc>()
+      ..add(LoadCreatorDetailEvent(widget.creatorId));
+  }
+
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) =>
-          sl<CreatorDetailBloc>()..add(LoadCreatorDetailEvent(creatorId)),
-      child: _CreatorProfileView(creatorId: creatorId),
+    return BlocProvider.value(
+      value: _bloc,
+      child: _CreatorProfileView(creatorId: widget.creatorId),
     );
   }
 }
@@ -61,10 +80,7 @@ class _CreatorProfileView extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () => context
                         .read<CreatorDetailBloc>()
-                        .add(LoadCreatorDetailEvent(
-                            (context.read<CreatorDetailBloc>().state
-                                    as CreatorDetailError)
-                                .message)),
+                        .add(LoadCreatorDetailEvent(creatorId)),
                     child: Text('retry'.tr()),
                   ),
                 ],
@@ -122,22 +138,22 @@ class _CreatorProfileView extends StatelessWidget {
           slivers: [
             _buildSliverAppBar(context, creator, color, canManage: canManage),
             SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildMeta(creator, color),
-                  if (creator.bio != null && creator.bio!.isNotEmpty) ...[
-                    const SizedBox(height: 20),
-                    _buildBioSection(context, creator.bio!),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildMeta(creator, color),
+                    if (creator.bio != null && creator.bio!.isNotEmpty) ...[
+                      const SizedBox(height: 20),
+                      _buildBioSection(context, creator.bio!),
+                    ],
+                    const SizedBox(height: 24),
+                    _buildWorksSection(context, creator.works),
                   ],
-                  const SizedBox(height: 24),
-                  _buildWorksSection(context, creator.works),
-                ],
+                ),
               ),
             ),
-          ),
         ],
         ),
       ),
