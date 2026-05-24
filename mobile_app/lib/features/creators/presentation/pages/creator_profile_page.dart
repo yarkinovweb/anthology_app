@@ -102,11 +102,34 @@ class _CreatorProfileView extends StatelessWidget {
     final color = _avatarColor(creator.name);
 
     final authState = context.read<AuthBloc>().state;
-    final canUpload  = authState is Authenticated && authState.user.canUpload;
-    final canManage  = authState is Authenticated && authState.user.canManageCreators;
+    final canUpload = authState is Authenticated && authState.user.canUpload;
+    final canManage = authState is Authenticated && authState.user.canManageCreators;
 
     return Scaffold(
       backgroundColor: AppTheme.background,
+      appBar: AppBar(
+        backgroundColor: color,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        toolbarHeight: 0,
+        actions: canManage
+            ? [
+                IconButton(
+                  icon: const Icon(Icons.edit_outlined),
+                  tooltip: 'edit'.tr(),
+                  onPressed: () => context
+                      .pushNamed(AppRoutes.creatorForm, extra: creator)
+                      .then((updated) {
+                    if (updated != null && context.mounted) {
+                      context
+                          .read<CreatorDetailBloc>()
+                          .add(LoadCreatorDetailEvent(creator.id));
+                    }
+                  }),
+                ),
+              ]
+            : null,
+      ),
       floatingActionButton: canUpload
           ? FloatingActionButton.extended(
               backgroundColor: AppTheme.primary,
@@ -133,103 +156,91 @@ class _CreatorProfileView extends StatelessWidget {
         onRefresh: () async {
           context.read<CreatorDetailBloc>().add(LoadCreatorDetailEvent(creatorId));
         },
-        child: CustomScrollView(
+        child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            _buildSliverAppBar(context, creator, color, canManage: canManage),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildMeta(creator, color),
-                    if (creator.bio != null && creator.bio!.isNotEmpty) ...[
-                      const SizedBox(height: 20),
-                      _buildBioSection(context, creator.bio!),
+          children: [
+            // ── Header ──────────────────────────────────────────────────
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [color, color.withAlpha(200)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      BackButton(color: Colors.white, onPressed: () => context.pop()),
+                      const Spacer(),
+                      if (canManage)
+                        IconButton(
+                          icon: const Icon(Icons.edit_outlined, color: Colors.white),
+                          tooltip: 'edit'.tr(),
+                          onPressed: () => context
+                              .pushNamed(AppRoutes.creatorForm, extra: creator)
+                              .then((updated) {
+                            if (updated != null && context.mounted) {
+                              context
+                                  .read<CreatorDetailBloc>()
+                                  .add(LoadCreatorDetailEvent(creator.id));
+                            }
+                          }),
+                        ),
                     ],
-                    const SizedBox(height: 24),
-                    _buildWorksSection(context, creator.works),
-                  ],
-                ),
-              ),
-            ),
-        ],
-        ),
-      ),
-    );
-  }
-
-  SliverAppBar _buildSliverAppBar(
-      BuildContext context, CreatorEntity creator, Color color,
-      {bool canManage = false}) {
-    return SliverAppBar(
-      expandedHeight: 220,
-      pinned: true,
-      backgroundColor: color,
-      foregroundColor: Colors.white,
-      actions: canManage
-          ? [
-              IconButton(
-                icon: const Icon(Icons.edit_outlined),
-                tooltip: 'edit'.tr(),
-                onPressed: () => context
-                    .pushNamed(
-                      AppRoutes.creatorForm,
-                      extra: creator,
-                    )
-                    .then((updated) {
-                  if (updated != null && context.mounted) {
-                    context
-                        .read<CreatorDetailBloc>()
-                        .add(LoadCreatorDetailEvent(creator.id));
-                  }
-                }),
-              ),
-            ]
-          : null,
-      flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [color, color.withAlpha(200)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 60),
-              CircleAvatar(
-                radius: 48,
-                backgroundColor: Colors.white24,
-                child: Text(
-                  creator.name[0].toUpperCase(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 44,
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
+                  CircleAvatar(
+                    radius: 48,
+                    backgroundColor: Colors.white24,
+                    child: Text(
+                      creator.name[0].toUpperCase(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 44,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    creator.name,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  if (creator.lifespan.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      creator.lifespan,
+                      style: const TextStyle(color: Colors.white70, fontSize: 14),
+                    ),
+                  ],
+                ],
               ),
-              const SizedBox(height: 12),
-              Text(
-                creator.name,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
+            ),
+            // ── Content ─────────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildMeta(creator, color),
+                  if (creator.bio != null && creator.bio!.isNotEmpty) ...[
+                    const SizedBox(height: 20),
+                    _buildBioSection(context, creator.bio!),
+                  ],
+                  const SizedBox(height: 24),
+                  _buildWorksSection(context, creator.works),
+                ],
               ),
-              if (creator.lifespan.isNotEmpty)
-                Text(
-                  creator.lifespan,
-                  style: const TextStyle(color: Colors.white70, fontSize: 14),
-                ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
